@@ -6,6 +6,13 @@ router.get('/', (req, res) => {
 })
 
 router.get('/login', (req, res) => {
+	res.render('login.html', {
+		isLogin: true
+	})
+})
+
+
+router.get('/register', (req, res) => {
 	res.render('login.html')
 })
 
