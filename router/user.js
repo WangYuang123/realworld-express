@@ -3,20 +3,19 @@
  */
 const express = require('express')
 const router = express.Router()
-const userController = require('../controller/user')
-const userValidator = require('../validate/user')
-const auth = require('../middleware/auth')
 
-// 用户登录
-router.post('/users/login', userValidator.login, userController.login)
+router.get('/login', (req, res) => {
+	res.render('login.html', {
+		isLogin: true
+	})
+})
 
-// 用户注册
-router.post('/users', userValidator.register, userController.register)
+router.get('/register', (req, res) => {
+	res.render('login.html')
+})
 
-// 获取当前登录用户
-router.get('/user', auth, userController.getCurrentUser)
-
-// 更新用户
-router.put('/user', auth,  userController.updateUser)
+router.get('/settings', (req, res) => {
+	res.render('settings.html')
+})
 
 module.exports = router;
