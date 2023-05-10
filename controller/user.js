@@ -10,7 +10,9 @@ exports.showLoginPage = async (req, res, next) => {
 
 exports.showRegisterPage = async (req, res, next) => {
   try {
-    res.render("login.html");
+    res.render("login.html", {
+      foo: 'node foo'
+    });
   } catch (err) {
     next(err);
   }
@@ -18,18 +20,7 @@ exports.showRegisterPage = async (req, res, next) => {
 
 exports.register = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
-    const errors = [];
-    if (!username) {
-      errors.push("用户名不能为空");
-    }
-    if (!email) {
-      errors.push("邮箱不能为空");
-    }
-    if (!password) {
-      errors.push("密码不能为空");
-    }
-    res.render("login.html", { errors });
+    res.send('post register')
   } catch (err) {
     next(err);
   }

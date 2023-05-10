@@ -1,6 +1,8 @@
 {{extend './layout/layout.html'}}
 {{block 'body'}}
-<div class="auth-page">
+<div class="auth-page" id="login">
+  <h1>hello {% foo %}</h1>
+  <h1>hello {{ foo }}</h1>
   <div class="container page">
     <div class="row">
       <div class="col-md-6 offset-md-3 col-xs-12">
@@ -9,25 +11,25 @@
           <a href="">Have an account?</a>
         </p>
 
-        {{if errors}}
-        {{each errors}}
         <ul class="error-messages">
-          <li>{{$value}}</li>
+          <li v-for="item in errors" :key="item.msg"> {% item.msg %}</li>
         </ul>
-        {{/each}}
-        {{/if}}
 
-        <form action="/register" method="POST">
+        <!-- <form action="/register" method="POST"> -->
+        <form @submit.prevent='handleSubmit'>
           {{ if !isLogin }}
           <fieldset class="form-group">
-            <input class="form-control form-control-lg" type="text" placeholder="Your Name" name="username" />
+            <input v-model="user.username" class="form-control form-control-lg" type="text" placeholder="Your Name"
+              name="username" />
           </fieldset>
           {{ /if }}
           <fieldset class="form-group">
-            <input class="form-control form-control-lg" type="text" placeholder="Email" name="email" />
+            <input v-model="user.email" class="form-control form-control-lg" type="text" placeholder="Email"
+              name="email" />
           </fieldset>
           <fieldset class="form-group">
-            <input class="form-control form-control-lg" type="password" placeholder="Password" name="password" />
+            <input v-model="user.password" class="form-control form-control-lg" type="password" placeholder="Password"
+              name="password" />
           </fieldset>
           <button class="btn btn-lg btn-primary pull-xs-right">
             {{ isLogin ? 'Sign in ' : 'Sign up'}}
@@ -37,4 +39,41 @@
     </div>
   </div>
 </div>
-{{/block}}    
+{{/block}}
+
+{{block 'script'}}
+<script>
+  ; (() => {
+    const app = new Vue({
+      el: '#login',
+      data: {
+        foo: 'vue for',
+        user: {
+          username: '',
+          email: '',
+          password: ''
+        },
+        errors: []
+      },
+      methods: {
+        async handleSubmit() {
+          // 1. 客户端表单验证
+          // 2. 验证通过，提交表单
+          try {
+            const { data } = await axios.post('/register', {
+              user: this.user
+            })
+            this.errors = []
+            window.location.href = '/'
+          } catch (error) {
+            if (error.response.status === 400) {
+              this.errors = error.response.data.errors
+            }
+            console.log('注册失败' + error)
+          }
+        }
+      }
+    })
+  })()
+</script>
+{{/block}}

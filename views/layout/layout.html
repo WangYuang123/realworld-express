@@ -29,12 +29,21 @@
   {{/block}}
   <!-- 底部 -->
   {{include './footer.html'}}
+
   <!-- 公共的js -->
+  <script src="/node_modules/vue/dist/vue.js"></script>
+  <script src="/node_modules/axios/dist/axios.js"></script>
+
+  <script>
+    // 全局混入
+    Vue.mixin({
+      delimiters: ['{%', '%}'],
+    })
+  </script>
+
+
   {{block 'script'}}{{/block}}
 
-  <script src="/node_modules/vue/dist/vue.min.js"></script>
-
-  {{block script}} {{/block }}
 </body>
 
 
