@@ -1,101 +1,52 @@
-const { User } = require('../model')
-const _ = require('lodash');
-const { jwtSecret } = require('../config/config.default')
-const jwt = require('../util/jwt')
+exports.showLoginPage = async (req, res, next) => {
+  try {
+    res.render("login.html", {
+      isLogin: true,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
-// 用户注册
-exports.register = async(req, res, next) => {
-	try{	
-		let user = new User(req.body.user)
-		await user.save()
-		
-		user = user.toJSON()
-		delete user.password
-		
-		res.status(200).json({
-			code: 200,
-			msg: '注册成功',
-			data: {
-				...user
-			}
-		})
-	}catch(err){
-		next(err);
-	}
-}
+exports.showRegisterPage = async (req, res, next) => {
+  try {
+    res.render("login.html");
+  } catch (err) {
+    next(err);
+  }
+};
 
+exports.register = async (req, res, next) => {
+  try {
+    const { username, email, password } = req.body;
+    const errors = [];
+    if (!username) {
+      errors.push("用户名不能为空");
+    }
+    if (!email) {
+      errors.push("邮箱不能为空");
+    }
+    if (!password) {
+      errors.push("密码不能为空");
+    }
+    res.render("login.html", { errors });
+  } catch (err) {
+    next(err);
+  }
+};
 
-// 用户登录
-exports.login = async(req, res, next) => {
-	try {
-		const user = req.user.toJSON()
-		// 生成token
-		const token = await jwt.sign(
-			{
-				userId: user._id
-			},
-			jwtSecret,
-			{
-				expiresIn: 60 * 60 * 24,
-			}
-		)
-		
-		// 移除密码属性
-		delete user.password
-		
-		res.status(200).json({
-			code: 200,
-			msg: '登录成功',
-			data: {
-				...user,
-				token
-			}
-		})
-	} catch(err) {
-		next(err);
-	}
-}
+exports.showSettingsPage = async (req, res, next) => {
+  try {
+    res.render("settings.html");
+  } catch (err) {
+    next(err);
+  }
+};
 
-//  获取当前用户
-exports.getCurrentUser =  async(req, res, next) => {
-	try{
-		const user = req.user.toJSON()
-		res.status(200).json({
-			code: 200,
-			msg: '获取成功',
-			data: {
-				...user
-			}
-		})
-	}catch(err){
-		next(err);
-	}
-}
-
-// 更新用户
-exports.updateUser = async(req, res, next) => {
-	try{
-		const { _id } = req.user
-		const user = req.body.user
-		
-		const result = await User.updateOne({ _id }, user)
-		
-		if(result.modifiedCount > 0) {
-			const updateAfterUser = await User.findById(_id)
-			res.status(200).json({
-				code: 200,
-				msg: '更新成功',
-				data: {
-					...updateAfterUser
-				}
-			})
-		} else {
-			res.status(404).json({
-				code: 10005,
-				msg: '更新失败'
-			})
-		}
-	}catch(err){
-		next(err);
-	}
-}
+exports.showProfilePage = async (req, res, next) => {
+  try {
+    res.render("profile.html");
+  } catch (err) {
+    next(err);
+  }
+};

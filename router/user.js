@@ -3,19 +3,18 @@
  */
 const express = require('express')
 const router = express.Router()
+const userCtrl = require('../controller/user')
 
-router.get('/login', (req, res) => {
-	res.render('login.html', {
-		isLogin: true
-	})
-})
+router.get('/login',userCtrl.showLoginPage)
 
-router.get('/register', (req, res) => {
-	res.render('login.html')
-})
+router.get('/register', userCtrl.showRegisterPage)
+router.post('/register', userCtrl.register)
 
-router.get('/settings', (req, res) => {
-	res.render('settings.html')
-})
+
+router.get('/settings', userCtrl.showSettingsPage)
+
+router.get('/profile/:username', userCtrl.showProfilePage)
+
+router.get('/profile/:username/favorites', userCtrl.showProfilePage)
 
 module.exports = router;

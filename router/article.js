@@ -3,21 +3,14 @@
  */
 const express = require('express')
 const router = express.Router()
+const articleCtrl = require('../controller/article')
 
-router.get('/', (req, res) => {
-	res.render('index.html')
-})
+router.get('/', articleCtrl.showHomePage)
 
-router.get('/editor', (req, res) => {
-	res.render('editor.html')
-})
+router.get('/editor', articleCtrl.showEditorPage)
 
-router.get('/editor/:articledId', (req, res) => {
-	res.render('editor.html')
-})
+router.get('/editor/:articledId', articleCtrl.showEditorPage)
 
-router.get('/article/:articledId', (req, res) => {
-	res.render('article.html')
-})
+router.get('/article/:articledId', articleCtrl.showArticlePage)
 
 module.exports = router
