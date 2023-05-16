@@ -10,7 +10,7 @@ const db = mongoose.connection
 db.on('error', (err) => {
 	console.log('mongoDB数据库连接失败', err)
 })
-db.once('opne', function() {
+db.once('open', function() {
 	console.log('mongoDB数据库连接成功')
 })
 

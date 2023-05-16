@@ -1,3 +1,5 @@
+const { User } = require("../model");
+
 exports.showLoginPage = async (req, res, next) => {
   try {
     res.render("login.html", {
@@ -11,7 +13,7 @@ exports.showLoginPage = async (req, res, next) => {
 exports.showRegisterPage = async (req, res, next) => {
   try {
     res.render("login.html", {
-      foo: 'node foo'
+      foo: "node foo",
     });
   } catch (err) {
     next(err);
@@ -20,7 +22,14 @@ exports.showRegisterPage = async (req, res, next) => {
 
 exports.register = async (req, res, next) => {
   try {
-    res.send('post register')
+    const user = new User(req.body.user);
+    await user.save();
+    // 保持登录状态
+    req.session.user = user;
+    // 跳转到首页
+    res.status(200).json({
+      user,
+    });
   } catch (err) {
     next(err);
   }

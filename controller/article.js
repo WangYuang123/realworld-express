@@ -2,6 +2,7 @@ const { Article, User } = require('../model/index')
 
 exports.showHomePage = async(req, res, next) => {
 	try{
+		console.log(req.session.user)
 		res.render('index.html')
 	}catch(err){
 		next(err);
